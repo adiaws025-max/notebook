@@ -1,0 +1,8 @@
+name = "dataledger"
+compatibility_date = "2024-09-23"
+
+[site]
+bucket = "./out"
+
+[[pages_build_output_dir]]
+output_dir = "out"
