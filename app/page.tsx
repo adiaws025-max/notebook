@@ -1,5 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
 import type { ParsedData, CleaningReport, DataProfile, Insight, WorkspaceEntry, Step } from "@/types";
 import { STEPS } from "@/types";
 import { cleanData } from "@/lib/csv";
@@ -17,6 +19,19 @@ import AnalyzeStep from "@/components/steps/AnalyzeStep";
 import NotebookStep from "@/components/steps/NotebookStep";
 
 export default function Home() {
+  const router = useRouter();
+  const [authReady, setAuthReady] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) { router.replace("/login"); } else { setAuthReady(true); }
+    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session) router.replace("/login");
+    });
+    return () => subscription.unsubscribe();
+  }, [router]);
+
   const [currentStep, setCurrentStep] = useState<Step>("upload");
   const [unlocked, setUnlocked] = useState<Set<Step>>(new Set(["upload"]));
   const [showWorkspaces, setShowWorkspaces] = useState(false);
@@ -101,6 +116,19 @@ export default function Home() {
     setShowWorkspaces(false);
   }
 
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    router.replace("/login");
+  }
+
+  if (!authReady) {
+    return (
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+        <p className="text-zinc-500 text-sm">Loading…</p>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100">
       {/* Header */}
@@ -131,6 +159,12 @@ export default function Home() {
             className="text-sm text-zinc-400 hover:text-white border border-zinc-700 hover:border-zinc-500 px-3 py-1.5 rounded-lg transition-colors"
           >
             {showWorkspaces ? "Hide" : "Workspaces"}
+          </button>
+          <button
+            onClick={handleLogout}
+            className="text-sm text-zinc-400 hover:text-white border border-zinc-700 hover:border-zinc-500 px-3 py-1.5 rounded-lg transition-colors"
+          >
+            Sign out
           </button>
         </div>
       </header>
