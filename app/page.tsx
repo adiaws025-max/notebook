@@ -24,10 +24,10 @@ export default function Home() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!session) { router.replace("/login"); } else { setAuthReady(true); }
+      if (!session) { router.replace("/assignment"); } else { setAuthReady(true); }
     });
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session) router.replace("/login");
+      if (!session) router.replace("/assignment");
     });
     return () => subscription.unsubscribe();
   }, [router]);
