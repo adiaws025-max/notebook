@@ -455,6 +455,28 @@ export default function AssignmentPage() {
                 title="First Look at the Raw Data"
                 sub="Understanding the structure — column names, value ranges, and what the first rows look like."
               />
+              {/* Dataset download buttons */}
+              <div className="flex flex-wrap gap-3">
+                <a
+                  href="/data/heart.csv"
+                  download="heart_disease.csv"
+                  className="inline-flex items-center gap-2 text-sm px-4 py-2 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 hover:border-blue-500 text-zinc-300 hover:text-white rounded-lg transition-colors"
+                >
+                  <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                  Heart Disease Dataset
+                  <span className="text-xs text-zinc-500">303 rows · 14 cols</span>
+                </a>
+                <a
+                  href="/data/fake_jobs.csv"
+                  download="fake_jobs.csv"
+                  className="inline-flex items-center gap-2 text-sm px-4 py-2 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 hover:border-purple-500 text-zinc-300 hover:text-white rounded-lg transition-colors"
+                >
+                  <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                  Fake Jobs Dataset
+                  <span className="text-xs text-zinc-500">18 cols · fraudulent label</span>
+                </a>
+              </div>
+
               <Note title="Why start with a preview?">
                 Before any processing, we verify the data loaded correctly, understand the column schema,
                 and spot obvious issues (wrong separators, shifted columns, unexpected values).
